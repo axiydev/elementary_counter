@@ -6,6 +6,7 @@ class CountryModel extends ElementaryModel {
   final List<Country?> _countryList = List.empty(growable: true);
 
   Future<List<Country?>?> getCountries() async {
+    _countryList.clear();
     await Future.delayed(const Duration(seconds: 1));
     _countryList.addAll(countryList);
     return _countryList;
