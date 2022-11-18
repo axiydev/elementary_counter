@@ -1,6 +1,5 @@
 import 'package:elementary/elementary.dart';
 import 'package:elementary_counter/screens/counter/counter_view_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CounterView extends ElementaryWidget<ICounterWidgetModel> {
@@ -14,11 +13,9 @@ class CounterView extends ElementaryWidget<ICounterWidgetModel> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: EntityStateNotifierBuilder<int>(
-            listenableEntityState: wm.valueState!,
+          child: StateNotifierBuilder<int>(
+            listenableState: wm.valueState!,
             builder: (_, data) => _MyTextView(title: data.toString()),
-            errorBuilder: (_, e, ___) => _MyTextView(title: e.toString()),
-            loadingBuilder: (_, __) => const CupertinoActivityIndicator(),
           ),
         ),
       ),
@@ -26,35 +23,23 @@ class CounterView extends ElementaryWidget<ICounterWidgetModel> {
       floatingActionButton: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          EntityStateNotifierBuilder<int>(
-            listenableEntityState: wm.valueState!,
+          StateNotifierBuilder<int>(
+            listenableState: wm.valueState!,
             builder: (_, data) => FloatingActionButton(
               heroTag: '1',
               onPressed: wm.increment,
               child: const Icon(Icons.add),
             ),
-            errorBuilder: (_, e, ___) => _MyTextView(title: e.toString()),
-            loadingBuilder: (_, __) => FloatingActionButton(
-              heroTag: '2',
-              onPressed: () {},
-              child: const Icon(Icons.sync_problem),
-            ),
           ),
           const SizedBox(
             width: 20,
           ),
-          EntityStateNotifierBuilder(
-            listenableEntityState: wm.valueState!,
+          StateNotifierBuilder(
+            listenableState: wm.valueState!,
             builder: (_, data) => FloatingActionButton(
               heroTag: '3',
               onPressed: wm.decrement,
               child: const Icon(Icons.remove),
-            ),
-            errorBuilder: (_, e, ___) => _MyTextView(title: e.toString()),
-            loadingBuilder: (_, __) => FloatingActionButton(
-              heroTag: '4',
-              onPressed: () {},
-              child: const Icon(Icons.sync_problem),
             ),
           ),
         ],

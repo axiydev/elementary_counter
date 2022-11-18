@@ -5,13 +5,13 @@ class CounterModel extends ElementaryModel {
   int _count = 0;
 
   Future<int> increment() async {
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
     ++_count;
     return _count;
   }
 
   Future<int> decrement() async {
-    await Future.delayed(const Duration(seconds: 1));
+    // await Future.delayed(const Duration(seconds: 1));
     --_count;
     return _count;
   }

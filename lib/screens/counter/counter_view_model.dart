@@ -11,42 +11,40 @@ CounterViewModel createCounterWmFactory(BuildContext context) {
 
 class CounterViewModel extends WidgetModel<CounterView, CounterModel>
     implements ICounterWidgetModel {
-  late EntityStateNotifier<int> _valueController;
+  late StateNotifier<int> _valueController;
   CounterViewModel(super.model);
   @override
   void initWidgetModel() {
-    _valueController = EntityStateNotifier<int>.value(model.counter);
+    _valueController = StateNotifier<int>(initValue: model.counter);
     super.initWidgetModel();
   }
 
   @override
   Future<void> decrement() async {
-    _valueController.loading();
     try {
       final newValue = await model.decrement();
-      _valueController.content(newValue);
-    } on Exception catch (e) {
-      _valueController.error(e);
+      _valueController.accept(newValue);
+    } on Exception {
+      _valueController.accept(-1000000);
     }
   }
 
   @override
   Future<void> increment() async {
-    _valueController.loading();
     try {
       final newValue = await model.increment();
-      _valueController.content(newValue);
-    } on Exception catch (e) {
-      _valueController.error(e);
+      _valueController.accept(newValue);
+    } on Exception {
+      _valueController.accept(-100000);
     }
   }
 
   @override
-  ListenableState<EntityState<int>>? get valueState => _valueController;
+  StateNotifier<int>? get valueState => _valueController;
 }
 
 abstract class ICounterWidgetModel extends IWidgetModel {
-  ListenableState<EntityState<int>>? get valueState;
+  StateNotifier<int>? get valueState;
   Future<void> increment();
   Future<void> decrement();
 }

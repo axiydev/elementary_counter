@@ -1,5 +1,5 @@
-import 'package:elementary_counter/screens/country/country_widget.dart';
-import 'package:elementary_counter/screens/country/country_widget_model.dart';
+import 'package:elementary_counter/screens/counter/counter_view.dart';
+import 'package:elementary_counter/screens/counter/counter_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -24,14 +24,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // home: Provider<CounterErrorHandler>(
-      //   create: (_) => CounterErrorHandler(),
-      //   child: const CounterView(),
-      // ),
-      home: Provider<CountryErrorHandler>(
-        create: (_) => CountryErrorHandler(),
-        child: const CountryWidget(),
+      home: Provider<CounterErrorHandler>(
+        create: (_) => CounterErrorHandler(),
+        child: const CounterView(),
       ),
+      // home: Provider<CountryErrorHandler>(
+      //   create: (_) => CountryErrorHandler(),
+      //   child: const CountryWidget(),
+      // ),
     );
   }
 }
