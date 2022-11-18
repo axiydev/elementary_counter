@@ -14,59 +14,66 @@ class CountryWidgetModel extends WidgetModel<CountryWidget, CountryModel>
     implements ICountryWidgetModel {
   CountryWidgetModel(super.model);
 
-  late EntityStateNotifier<List<Country?>?> _valueController;
+  late EntityStateNotifier<List<Country?>?>? _valueController;
+
+  late StateNotifier<TextStyle> _valueTextStyleController;
   @override
   void initWidgetModel() {
     _valueController =
         EntityStateNotifier<List<Country?>?>.value(model.countries);
+    _valueTextStyleController =
+        StateNotifier<TextStyle>(initValue: const TextStyle(color: Colors.red));
     super.initWidgetModel();
   }
 
   @override
   Future<void> getAllCountries() async {
-    _valueController.loading();
+    _valueController!.loading();
     try {
       final countries = await model.getCountries();
-      _valueController.content(countries!);
+      _valueController!.content(countries!);
     } on Exception catch (e) {
-      _valueController.error(e);
+      _valueController!.error(e);
     }
   }
 
   @override
   ListenableState<EntityState<List<Country?>?>> get valueState =>
-      _valueController;
+      _valueController!;
 
   @override
   Future<void> selectCountry(
       {required bool? isSelecetd, required int? index}) async {
-    // _valueController.loading();  //create loading
+    _valueController!.loading(); //create loading
     try {
       final countrLt =
           await model.selectCountries(isSelected: isSelecetd!, index: index!);
-      _valueController.content(countrLt);
+      _valueController!.content(countrLt);
       // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-      _valueController.notifyListeners();
+      _valueController!.notifyListeners();
     } on Exception catch (e) {
-      _valueController.error(e);
+      _valueController!.error(e);
     }
   }
 
   @override
   Future<void> deleteCountryByCode({required String code}) async {
-    _valueController.loading();
+    _valueController!.loading();
     try {
       final data = await model.deleteCountryById(code: code);
-      _valueController.content(data);
+      _valueController!.content(data);
     } on Exception catch (e) {
-      _valueController.error(e);
+      _valueController!.error(e);
     }
   }
+
+  @override
+  ListenableState<TextStyle> get valueStyle => _valueTextStyleController;
 }
 
 abstract class ICountryWidgetModel extends IWidgetModel {
   ListenableState<EntityState<List<Country?>?>> get valueState;
-
+  ListenableState<TextStyle> get valueStyle;
   Future<void> getAllCountries();
   Future<void> deleteCountryByCode({required String code});
   Future<void> selectCountry({required bool? isSelecetd, required int? index});

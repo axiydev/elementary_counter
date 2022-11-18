@@ -20,32 +20,41 @@ class CountryWidget extends ElementaryWidget<ICountryWidgetModel> {
           title: const Text('country'),
         ),
         body: SafeArea(
-            child: EntityStateNotifierBuilder<List<Country?>?>(
-          listenableEntityState: wm.valueState,
-          builder: (_, data) => ListView.builder(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            shrinkWrap: true,
-            itemCount: data!.length,
-            itemBuilder: (_, index) {
-              final country = data[index];
-              return ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => wm.deleteCountryByCode(code: country!.code!),
-                ),
-                title: Text(country!.name ?? 'name'),
-                subtitle: Text(country.code ?? ''),
-                trailing: Switch(
-                    value: country.isSelected!,
-                    onChanged: (value) =>
-                        wm.selectCountry(isSelecetd: value, index: index)),
-              );
-            },
-          ),
-          errorBuilder: (_, e, ___) => Text(e.toString()),
-          loadingBuilder: (_, __) =>
-              const Center(child: CupertinoActivityIndicator()),
+            child:
+                DoubleSourceBuilder<EntityState<List<Country?>?>, TextStyle?>(
+          firstSource: wm.valueState,
+          secondSource: wm.valueStyle,
+          builder: (_, countryDataState, style) {
+            if (countryDataState!.isLoading) {
+              return const CupertinoActivityIndicator();
+            }
+
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              shrinkWrap: true,
+              itemCount: countryDataState.data!.length,
+              itemBuilder: (_, index) {
+                final country = countryDataState.data![index];
+                return ListTile(
+                  leading: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () =>
+                        wm.deleteCountryByCode(code: country!.code!),
+                  ),
+                  title: Text(
+                    country!.name ?? 'name',
+                    style: style,
+                  ),
+                  subtitle: Text(country.code ?? ''),
+                  trailing: Switch(
+                      value: country.isSelected!,
+                      onChanged: (value) =>
+                          wm.selectCountry(isSelecetd: value, index: index)),
+                );
+              },
+            );
+          },
         )),
         floatingActionButton: EntityStateNotifierBuilder<List<Country?>?>(
           listenableEntityState: wm.valueState,
