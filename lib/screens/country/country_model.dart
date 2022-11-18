@@ -22,5 +22,15 @@ class CountryModel extends ElementaryModel {
     return _countryList;
   }
 
+  Future<List<Country?>?> deleteCountryById({required String code}) async {
+    _countryList.clear();
+    await Future.delayed(const Duration(seconds: 1));
+
+    countryList.removeWhere(
+        (element) => element.code!.toLowerCase() == code.toLowerCase());
+    _countryList.addAll(countryList);
+    return _countryList;
+  }
+
   List<Country?>? get countries => _countryList;
 }

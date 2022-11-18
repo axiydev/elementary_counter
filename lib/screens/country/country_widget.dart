@@ -29,12 +29,18 @@ class CountryWidget extends ElementaryWidget<ICountryWidgetModel> {
             itemCount: data!.length,
             itemBuilder: (_, index) {
               final country = data[index];
-              return SwitchListTile(
-                  title: Text(country!.name ?? 'name'),
-                  subtitle: Text(country.code ?? ''),
-                  value: country.isSelected!,
-                  onChanged: (value) =>
-                      wm.selectCountry(isSelecetd: value, index: index));
+              return ListTile(
+                leading: IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: () => wm.deleteCountryByCode(code: country!.code!),
+                ),
+                title: Text(country!.name ?? 'name'),
+                subtitle: Text(country.code ?? ''),
+                trailing: Switch(
+                    value: country.isSelected!,
+                    onChanged: (value) =>
+                        wm.selectCountry(isSelecetd: value, index: index)),
+              );
             },
           ),
           errorBuilder: (_, e, ___) => Text(e.toString()),

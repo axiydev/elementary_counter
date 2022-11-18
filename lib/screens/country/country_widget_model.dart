@@ -45,7 +45,19 @@ class CountryWidgetModel extends WidgetModel<CountryWidget, CountryModel>
       final countrLt =
           await model.selectCountries(isSelected: isSelecetd!, index: index!);
       _valueController.content(countrLt);
+      // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
       _valueController.notifyListeners();
+    } on Exception catch (e) {
+      _valueController.error(e);
+    }
+  }
+
+  @override
+  Future<void> deleteCountryByCode({required String code}) async {
+    _valueController.loading();
+    try {
+      final data = await model.deleteCountryById(code: code);
+      _valueController.content(data);
     } on Exception catch (e) {
       _valueController.error(e);
     }
@@ -56,7 +68,7 @@ abstract class ICountryWidgetModel extends IWidgetModel {
   ListenableState<EntityState<List<Country?>?>> get valueState;
 
   Future<void> getAllCountries();
-
+  Future<void> deleteCountryByCode({required String code});
   Future<void> selectCountry({required bool? isSelecetd, required int? index});
 }
 
